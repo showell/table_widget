@@ -5,6 +5,7 @@ build_even_number_table();
 
 function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
     function overwrite(i, elem) {
+        console.log("overwrite", i);
         if (i >= parent_elem.children.length) {
             parent_elem.append(elem);
         } else {
@@ -12,11 +13,15 @@ function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
         }
     }
 
-    function repopulate() {
-        const num_rows = get_num_rows();
-        for (let i = 0; i < num_rows; ++i) {
+    function repopulate_range(lo, hi) {
+        for (let i = lo; i < hi; ++i) {
             overwrite(i, make_child(i));
         }
+    }
+
+    function repopulate() {
+        const num_rows = get_num_rows();
+        repopulate_range(0, num_rows);
 
         // TODO: handle shrinking lists
     }
