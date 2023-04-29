@@ -194,6 +194,7 @@ function grow_data_even_numbers({even_numbers, resize_list}) {
         resize_list();
     }
 
+    bump();
     const bump_id = setInterval(bump, 500);
 }
 
@@ -202,7 +203,7 @@ function build_even_number_table() {
         return document.querySelector("#even_numbers");
     }
 
-    let even_numbers = [2, 4, 6];
+    let even_numbers = [];
 
     const number_store_callback = {
         get_integers: () => even_numbers,
