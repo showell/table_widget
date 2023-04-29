@@ -114,6 +114,7 @@ function build_even_number_table() {
     table.id = "even_numbers";
     setStyles(table_widget.th_square, {
         color: "darkred",
+        background: "lightgreen",
     });
 
     bump();
