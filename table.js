@@ -24,6 +24,7 @@ function simple_table_widget({ make_header_row, num_rows, make_tr }) {
 
     function repopulate() {
         console.log("repopulate", table.id);
+        tbody.innerHTML = "";
         for (let i = 0; i < num_rows; ++i) {
             tbody.append(make_tr(i));
         }
@@ -42,19 +43,32 @@ function maybe_stripe(elem, i, color) {
     return elem;
 }
 
+function wire_up_reverse_button({th, callback}) {
+    const button = document.createElement("button");
+    button.innerText = "reverse";
+    button.addEventListener("click", callback);
+    th.append("  ", button);
+}
+
 function build_number_store(ints) {
+    let my_ints = ints.slice();
+
     function get_integers() {
-        return ints;
+        return my_ints;
     }
 
     function size() {
-        return ints.length;
+        return my_ints.length;
     }
 
-    return {get_integers, size};
+    function reverse() {
+        my_ints.reverse();
+    }
+
+    return {get_integers, size, reverse};
 }
 
-function prime_store() {
+function build_prime_store() {
     return build_number_store([2, 3, 5, 7, 11, 13, 17]);
 }
 
@@ -63,11 +77,23 @@ function build_prime_table() {
         return document.querySelector("#prime_squares");
     }
 
-    const table_widget = build_integer_table_widget({number_store: prime_store()});
+    const number_store = build_prime_store();
+    const table_widget = build_integer_table_widget({number_store});
     const table = table_widget.table;
+
     table.id = "prime_squares";
     table_widget.repopulate();
     container().append(table);
+
+    function reverse() {
+        number_store.reverse();
+        table_widget.repopulate();
+    }
+
+    wire_up_reverse_button({
+        th: table_widget.th_n,
+        callback: reverse,
+    });
 }
 
 function build_integer_table_widget({number_store}) {
@@ -79,14 +105,14 @@ function build_integer_table_widget({number_store}) {
         });
     }
 
-    function th_n() {
+    function make_th_n() {
         const th = styled_th();
         th.id = "integer-th-n";
         th.append("Number");
         return th;
     }
 
-    function th_square() {
+    function make_th_square() {
         const th = styled_th();
         th.id = "integer-th-square";
         th.innerHTML = "n<sup>2</sup>";
@@ -94,7 +120,7 @@ function build_integer_table_widget({number_store}) {
     }
 
     function make_header_row() {
-        return dom_tr(th_n(), th_square());
+        return dom_tr(th_n, th_square);
     }
 
     function style_integer_table(table) {
@@ -156,6 +182,9 @@ function build_integer_table_widget({number_store}) {
         return style_tr(tr, i);
     }
 
+    const th_n = make_th_n();
+    const th_square = make_th_square();
+
     const table_widget = simple_table_widget({
         make_header_row,
         num_rows: num_rows(),
@@ -167,6 +196,8 @@ function build_integer_table_widget({number_store}) {
     return {
         table: table_widget.table,
         repopulate: table_widget.repopulate,
+        th_n,
+        th_square,
     }
 }
 
