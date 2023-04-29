@@ -13,7 +13,7 @@ function dom_td({ id, elem }) {
     return td;
 }
 
-function make_simple_table({ make_header_row, num_rows, make_tr }) {
+function simple_table_widget({ make_header_row, num_rows, make_tr }) {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     table.append(thead);
@@ -22,11 +22,14 @@ function make_simple_table({ make_header_row, num_rows, make_tr }) {
     const tbody = document.createElement("tbody");
     table.append(tbody);
 
-    for (let i = 0; i < num_rows; ++i) {
-        tbody.append(make_tr(i));
+    function repopulate() {
+        console.log("repopulate", table.id);
+        for (let i = 0; i < num_rows; ++i) {
+            tbody.append(make_tr(i));
+        }
     }
 
-    return table;
+    return {table, repopulate};
 }
 
 function maybe_stripe(elem, i, color) {
@@ -60,12 +63,14 @@ function build_prime_table() {
         return document.querySelector("#prime_squares");
     }
 
-    const table = build_integer_table({number_store: prime_store()});
+    const table_widget = build_integer_table_widget({number_store: prime_store()});
+    const table = table_widget.table;
     table.id = "prime_squares";
+    table_widget.repopulate();
     container().append(table);
 }
 
-function build_integer_table({number_store}) {
+function build_integer_table_widget({number_store}) {
     function styled_th() {
         const elem = document.createElement("th");
         return setStyles(elem, {
@@ -151,14 +156,18 @@ function build_integer_table({number_store}) {
         return style_tr(tr, i);
     }
 
-    const table = make_simple_table({
+    const table_widget = simple_table_widget({
         make_header_row,
         num_rows: num_rows(),
         make_tr,
     });
-    style_integer_table(table);
 
-    return table;
+    style_integer_table(table_widget.table);
+
+    return {
+        table: table_widget.table,
+        repopulate: table_widget.repopulate,
+    }
 }
 
 function style_generic_table(table) {
