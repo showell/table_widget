@@ -23,25 +23,35 @@ function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
         }
     }
 
+    function compress(num_rows) {
+        for (let i = num_rendered() - 1; i >= num_rows; --i) {
+            parent_elem.children[i].remove();
+        }
+    } 
+
     function repopulate() {
         const num_rows = get_num_rows();
+        compress(num_rows);
         repopulate_range(0, num_rows);
-
-        // TODO: handle shrinking lists
     }
 
-    function grow() {
+    function resize_list() {
+        /*
+            The contract here is that none of the existing data elements
+            have changed.
+        */
         const num_rows = get_num_rows();
+        compress(num_rows);
         repopulate_range(num_rendered(), num_rows);
     }
 
-    return { grow, repopulate };
+    return { resize_list, repopulate };
 }
 
 function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
-    function grow() {
-        console.log("grow", table.id);
-        my_renderer.grow();
+    function resize_list() {
+        console.log("resize_list", table.id);
+        my_renderer.resize_list();
     }
 
     function repopulate() {
@@ -68,7 +78,7 @@ function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
 
     repopulate();
 
-    return { table, repopulate, grow };
+    return { table, repopulate, resize_list };
 }
 
 function dom_empty_table() {
@@ -168,6 +178,12 @@ function build_fruits_table() {
     document.querySelector("#fruits").append(table);
 }
 
+function grow_data_even_numbers() {
+    /*
+        This is to exercise our data-resizing code.
+    */
+}
+
 function build_even_number_table() {
     function container() {
         return document.querySelector("#even_numbers");
@@ -175,16 +191,18 @@ function build_even_number_table() {
 
     function bump() {
         i += 1;
-        if (i > 20) {
+        if (i > 8) {
             clearInterval(bump_id);
+            even_numbers = [2, 4, 6];
+            table_widget.resize_list();
             return;
         }
         even_numbers.push(i * 2);
-        table_widget.grow();
+        table_widget.resize_list();
     }
 
     let i = 0;
-    const even_numbers = [];
+    let even_numbers = [];
 
     const number_store_callback = {
         get_integers: () => even_numbers,
@@ -344,8 +362,8 @@ function build_integer_table_widget({ number_store_callback }) {
         return style_tr(tr, i);
     }
 
-    function grow() {
-        table_widget.grow();
+    function resize_list() {
+        table_widget.resize_list();
     }
 
     function repopulate() {
@@ -370,7 +388,7 @@ function build_integer_table_widget({ number_store_callback }) {
     return {
         table: table_widget.table,
         repopulate,
-        grow,
+        resize_list,
         th_n,
         th_square,
     };
