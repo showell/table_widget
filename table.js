@@ -18,7 +18,7 @@ function simple_table_widget({ make_header_row, make_tr }) {
         }
     }
 
-    return {table, repopulate};
+    return { table, repopulate };
 }
 
 function dom_tr(...child_elems) {
@@ -44,7 +44,7 @@ function maybe_stripe(elem, i, color) {
     return elem;
 }
 
-function wire_up_reverse_button({th, callback}) {
+function wire_up_reverse_button({ th, callback }) {
     const button = document.createElement("button");
     button.innerText = "reverse";
     button.addEventListener("click", callback);
@@ -64,7 +64,7 @@ function build_even_number_table() {
         even_numbers.push(i * 2);
         table_widget.repopulate();
     }
-    
+
     let i = 0;
     const even_numbers = [];
 
@@ -73,7 +73,7 @@ function build_even_number_table() {
         size: () => even_numbers.length,
     };
 
-    const table_widget = build_integer_table_widget({number_store_callback});
+    const table_widget = build_integer_table_widget({ number_store_callback });
     const table = table_widget.table;
 
     table.id = "even_numbers";
@@ -102,7 +102,7 @@ function build_number_store(ints) {
         my_ints.reverse();
     }
 
-    return {get_integers, size, reverse};
+    return { get_integers, size, reverse };
 }
 
 function build_prime_store() {
@@ -125,7 +125,7 @@ function build_prime_table() {
         size: number_store.size,
     };
 
-    const table_widget = build_integer_table_widget({number_store_callback});
+    const table_widget = build_integer_table_widget({ number_store_callback });
     const table = table_widget.table;
 
     table.id = "prime_squares";
@@ -138,7 +138,7 @@ function build_prime_table() {
     });
 }
 
-function build_integer_table_widget({number_store_callback}) {
+function build_integer_table_widget({ number_store_callback }) {
     function styled_th() {
         const elem = document.createElement("th");
         return setStyles(elem, {
@@ -243,7 +243,7 @@ function build_integer_table_widget({number_store_callback}) {
         repopulate,
         th_n,
         th_square,
-    }
+    };
 }
 
 function style_generic_table(table) {
