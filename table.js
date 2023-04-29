@@ -4,13 +4,9 @@ build_prime_table();
 build_even_number_table();
 
 function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
-    function num_rendered() {
-        return parent_elem.children.length;
-    }
-
     function overwrite(i, elem) {
         console.log("overwrite", i);
-        if (i >= num_rendered()) {
+        if (i >= parent_elem.children.length) {
             parent_elem.append(elem);
         } else {
             parent_elem.replaceChild(elem, parent_elem.children[i]);
@@ -24,7 +20,7 @@ function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
     }
 
     function compress(num_rows) {
-        for (let i = num_rendered() - 1; i >= num_rows; --i) {
+        for (let i = parent_elem.children.length - 1; i >= num_rows; --i) {
             parent_elem.children[i].remove();
         }
     } 
@@ -42,7 +38,7 @@ function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
         */
         const num_rows = get_num_rows();
         compress(num_rows);
-        repopulate_range(num_rendered(), num_rows);
+        repopulate_range(parent_elem.children.length, num_rows);
     }
 
     return { resize_list, repopulate };
