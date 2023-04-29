@@ -1,14 +1,3 @@
-function dom_header_row(headers) {
-    const tr = document.createElement("tr");
-    for (const h of headers) {
-        const th = document.createElement("th");
-        th.id = h.id;
-        th.innerHTML = h.innerHTML;
-        tr.append(th);
-    }
-    return tr;
-}
-
 function dom_tr(child_elems) {
     const tr = document.createElement("tr");
     tr.append(...child_elems);
@@ -49,14 +38,34 @@ function maybe_stripe(elem, i, color) {
 }
 
 function build_integer_table() {
-    const primes = [2, 3, 5, 7, 11, 13];
+    const primes = [2, 3, 5, 7, 11, 13, 17];
     const current_ints = primes;
 
-    // assume innerHTML comes from calling some templates or whatever
-    const integer_headers = [
-        { id: "n", innerHTML: "Number" },
-        { id: "square", innerHTML: "n<sup>2</sup>" },
-    ];
+    function styled_th() {
+        const elem = document.createElement("th");
+        return setStyles(elem, {
+            background: "darkseagreen",
+            color: "darkblue",
+        });
+    }
+
+    function th_n() {
+        const th = styled_th();
+        th.id = "integer-th-n";
+        th.append("Number");
+        return th;
+    }
+
+    function th_square() {
+        const th = styled_th();
+        th.id = "integer-th-square";
+        th.innerHTML = "n<sup>2</sup>";
+        return th;
+    }
+
+    function make_header_row() {
+        return dom_tr([th_n(), th_square()]);
+    }
 
     function style_integer_table(table) {
         style_generic_table(table);
@@ -72,15 +81,6 @@ function build_integer_table() {
 
     function num_rows() {
         return current_ints.length;
-    }
-
-    function make_header_row() {
-        const elem = dom_header_row(integer_headers);
-        setStyles(elem, {
-            background: "darkseagreen",
-            color: "darkblue",
-        });
-        return elem;
     }
 
     function style_td_n(td) {
