@@ -3,18 +3,38 @@ build_fruits_table();
 build_prime_table();
 build_even_number_table();
 
-function list_renderer({ parent_elem, make_child, get_num_rows }) {
+function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
+    const FAKE_DELAY = 100;
+
+    function actually_populate() {
+        for (let i = 0; i < get_num_rows(); ++i) {
+            parent_elem.replaceChild(make_child(i), parent_elem.children[i]);
+        }
+    }
+
     function repopulate() {
         parent_elem.innerHTML = "";
         for (let i = 0; i < get_num_rows(); ++i) {
-            parent_elem.append(make_child(i));
+            parent_elem.append(empty_row());
         }
+        setTimeout(actually_populate, FAKE_DELAY);
     }
 
     return { repopulate };
 }
 
 function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
+    function repopulate() {
+        console.log("repopulate", table.id);
+        my_renderer.repopulate();
+    }
+
+    function empty_row() {
+        const td = document.createElement("td");
+        td.innerText = "...";
+        return dom_tr(td);
+    } 
+
     const {table, thead, tbody} = dom_empty_table();
 
     thead.append(make_header_row());
@@ -23,12 +43,8 @@ function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
         parent_elem: tbody,
         make_child: make_tr,
         get_num_rows,
+        empty_row,
     });
-
-    function repopulate() {
-        console.log("repopulate", table.id);
-        my_renderer.repopulate();
-    }
 
     repopulate();
 
@@ -159,6 +175,10 @@ function build_even_number_table() {
     const table = table_widget.table;
 
     table.id = "even_numbers";
+    setStyles(table_widget.th_n, {
+        color: "darkgreen",
+    });
+
     setStyles(table_widget.th_square, {
         color: "darkred",
         background: "lightgreen",
@@ -251,18 +271,16 @@ function build_integer_table_widget({ number_store_callback }) {
         style_generic_table(table);
         setStyles(table, {
             textAlign: "center",
+            width: "365px",
         });
         return table;
-    }
-
-    function num_rows() {
-        return number_store_callback.size();
     }
 
     function style_td_n(td) {
         td = style_generic_td(td);
         return setStyles(td, {
             color: "blue",
+            width: "230px",
         });
     }
 
