@@ -178,20 +178,43 @@ function grow_data_even_numbers({even_numbers, resize_list}) {
     /*
         This is to exercise our data-resizing code.
     */
-    let i = 0;
+    const container = document.querySelector("#even_numbers");
 
-    function bump() {
-        i += 1;
-        if (i > 20) {
-            clearInterval(bump_id);
-            return;
-        }
-        even_numbers.push(i * 2);
+    function shrink() {
+        even_numbers.pop();
+        resize_list();
+    }
+        
+    function grow() {
+        even_numbers.push(even_numbers.length * 2); 
         resize_list();
     }
 
-    bump();
-    const bump_id = setInterval(bump, 500);
+    function make_button(label) {
+        const button = document.createElement("button");
+        button.innerText = label;
+        setStyles(button, {
+            margin: "5px",
+            padding: "7Px",
+        });
+        return button;
+    }
+        
+    function make_shrink_button() {
+        const button = make_button("shrink");
+        container.prepend(button);
+        button.addEventListener("click", shrink);
+    }
+
+    function make_grow_button() {
+        const button = make_button("grow");
+        container.prepend(button);
+        button.addEventListener("click", grow);
+    }
+
+    grow();
+    make_shrink_button();
+    make_grow_button();
 }
 
 function build_even_number_table() {
