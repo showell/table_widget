@@ -60,9 +60,7 @@ function build_integer_table() {
         setStyles(table, {
             textAlign: "center",
         });
-        setStyles(table.querySelector("thead"), {
-            background: "darkseagreen",
-        });
+        return table;
     }
 
     function container() {
@@ -74,7 +72,11 @@ function build_integer_table() {
     }
 
     function make_header_row() {
-        return dom_header_row(integer_headers);
+        const elem = dom_header_row(integer_headers);
+        setStyles(elem, {
+            background: "darkseagreen",
+        });
+        return elem;
     }
 
     function style_td_n(td) {
@@ -84,27 +86,42 @@ function build_integer_table() {
     function style_td_square(td) {
         td = style_generic_td(td);
         setStyles(td, {
-            background: "antiquewhite",
             color: "blue",
             width: "60px",
         });
         return td;
     }
 
+    function style_tr(tr, i) {
+        if (i % 2) {
+            setStyles(tr, {
+                background: "antiquewhite",
+            });
+        }
+
+        return tr;
+    }
+
+    function make_td_id(n, field) {
+        return `integer-table-${n}-${field}`;
+    }
+
     function make_td_n(data) {
-        const td = dom_td({ id: `n-${data.n}`, elem: data.n });
+        const id = make_td_id(data.n, "n");
+        const td = dom_td({ id, elem: data.n });
         return style_td_n(td);
     }
 
     function make_td_square(data) {
-        const td = dom_td({ id: `square-${data.n}`, elem: data.square });
+        const id = make_td_id(data.n, "square");
+        const td = dom_td({ id, elem: data.square });
         return style_td_square(td);
     }
 
     function make_tr(i) {
         const data = integer_data[i];
-        const td_makers = [make_td_n, make_td_square];
-        return dom_tr([make_td_n(data), make_td_square(data)]);
+        const tr = dom_tr([make_td_n(data), make_td_square(data)]);
+        return style_tr(tr, i);
     }
 
     const table = make_simple_table({
