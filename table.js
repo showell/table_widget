@@ -38,16 +38,19 @@ function make_simple_table({ make_header_row, num_rows, make_tr }) {
     return table;
 }
 
+function maybe_stripe(elem, i, color) {
+    if (i % 2) {
+        setStyles(elem, {
+            background: color,
+        });
+    }
+
+    return elem;
+}
+
 function build_integer_table() {
-    const integer_data = [
-        { n: 0, square: 0 },
-        { n: 1, square: 1 },
-        { n: 2, square: 4 },
-        { n: 3, square: 9 },
-        { n: 4, square: 16 },
-        { n: 5, square: 25 },
-        { n: 6, square: 36 },
-    ];
+    const primes = [2, 3, 5, 7, 11, 13];
+    const current_ints = primes;
 
     // assume innerHTML comes from calling some templates or whatever
     const integer_headers = [
@@ -68,59 +71,61 @@ function build_integer_table() {
     }
 
     function num_rows() {
-        return integer_data.length;
+        return current_ints.length;
     }
 
     function make_header_row() {
         const elem = dom_header_row(integer_headers);
         setStyles(elem, {
             background: "darkseagreen",
+            color: "darkblue",
         });
         return elem;
     }
 
     function style_td_n(td) {
-        return style_generic_td(td);
+        td = style_generic_td(td);
+        return setStyles(td, {
+            color: "blue",
+        });
     }
 
     function style_td_square(td) {
         td = style_generic_td(td);
-        setStyles(td, {
-            color: "blue",
-            width: "60px",
+        return setStyles(td, {
+            color: "darkred",
+            width: "70px",
+            fontSize: "150%",
         });
-        return td;
     }
 
     function style_tr(tr, i) {
-        if (i % 2) {
-            setStyles(tr, {
-                background: "antiquewhite",
-            });
-        }
-
-        return tr;
+        return maybe_stripe(tr, i, "lightgray");
     }
 
     function make_td_id(n, field) {
         return `integer-table-${n}-${field}`;
     }
 
-    function make_td_n(data) {
-        const id = make_td_id(data.n, "n");
-        const td = dom_td({ id, elem: data.n });
+    function square_str(n) {
+        return `${n * n}`;
+    }
+
+    function make_td_n(n) {
+        const id = make_td_id(n, "n");
+        const td = dom_td({ id, elem: `${n}`});
         return style_td_n(td);
     }
 
-    function make_td_square(data) {
-        const id = make_td_id(data.n, "square");
-        const td = dom_td({ id, elem: data.square });
+    function make_td_square(n) {
+        const id = make_td_id(n, "square");
+        const td = dom_td({ id, elem: square_str(n) });
         return style_td_square(td);
     }
 
     function make_tr(i) {
-        const data = integer_data[i];
-        const tr = dom_tr([make_td_n(data), make_td_square(data)]);
+        const n = current_ints[i];
+        const tr = dom_tr([make_td_n(n), make_td_square(n)]);
         return style_tr(tr, i);
     }
 
@@ -172,6 +177,7 @@ function setStyles(elem, styles) {
     }
 
     // console.trace(info.join("\n"));
+    return elem;
 }
 
 build_integer_table();
