@@ -178,10 +178,23 @@ function build_fruits_table() {
     document.querySelector("#fruits").append(table);
 }
 
-function grow_data_even_numbers() {
+function grow_data_even_numbers({even_numbers, resize_list}) {
     /*
         This is to exercise our data-resizing code.
     */
+    let i = 0;
+
+    function bump() {
+        i += 1;
+        if (i > 20) {
+            clearInterval(bump_id);
+            return;
+        }
+        even_numbers.push(i * 2);
+        resize_list();
+    }
+
+    const bump_id = setInterval(bump, 500);
 }
 
 function build_even_number_table() {
@@ -189,20 +202,7 @@ function build_even_number_table() {
         return document.querySelector("#even_numbers");
     }
 
-    function bump() {
-        i += 1;
-        if (i > 8) {
-            clearInterval(bump_id);
-            even_numbers = [2, 4, 6];
-            table_widget.resize_list();
-            return;
-        }
-        even_numbers.push(i * 2);
-        table_widget.resize_list();
-    }
-
-    let i = 0;
-    let even_numbers = [];
+    let even_numbers = [2, 4, 6];
 
     const number_store_callback = {
         get_integers: () => even_numbers,
@@ -222,10 +222,12 @@ function build_even_number_table() {
         background: "lightgreen",
     });
 
-    bump();
     container().append(wrap_table(table));
 
-    const bump_id = setInterval(bump, 500);
+    grow_data_even_numbers({
+        even_numbers,
+        resize_list: table_widget.resize_list,
+    });
 }
 
 function build_number_store(ints) {
