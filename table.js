@@ -113,7 +113,7 @@ function build_integer_table() {
 
     function make_td_n(n) {
         const id = make_td_id(n, "n");
-        const td = dom_td({ id, elem: `${n}`});
+        const td = dom_td({ id, elem: `${n}` });
         return style_td_n(td);
     }
 
