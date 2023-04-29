@@ -22,29 +22,7 @@ function dom_td({ id, elem }) {
     return td;
 }
 
-function style_generic_table(table) {
-    setStyles(table, {
-        border: "1px solid blue",
-        borderCollapse: "collapse",
-    });
-
-    for (const th of table.querySelectorAll("th")) {
-        setStyles(th, {
-            border: "1px solid blue",
-            padding: "4px",
-        });
-    }
-}
-
-function style_generic_td(td) {
-    setStyles(td, {
-        border: "1px solid blue",
-        padding: "4px",
-    });
-    return td;
-}
-
-function make_table({ make_header_row, num_rows, make_tr }) {
+function make_simple_table({ make_header_row, num_rows, make_tr }) {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     table.append(thead);
@@ -129,7 +107,7 @@ function build_integer_table() {
         return dom_tr([make_td_n(data), make_td_square(data)]);
     }
 
-    const table = make_table({
+    const table = make_simple_table({
         make_header_row,
         num_rows: num_rows(),
         make_tr,
@@ -137,6 +115,28 @@ function build_integer_table() {
     table.id = "integer_table";
     style_integer_table(table);
     container().append(table);
+}
+
+function style_generic_table(table) {
+    setStyles(table, {
+        border: "1px solid blue",
+        borderCollapse: "collapse",
+    });
+
+    for (const th of table.querySelectorAll("th")) {
+        setStyles(th, {
+            border: "1px solid blue",
+            padding: "4px",
+        });
+    }
+}
+
+function style_generic_td(td) {
+    setStyles(td, {
+        border: "1px solid blue",
+        padding: "4px",
+    });
+    return td;
 }
 
 function setStyles(elem, styles) {
