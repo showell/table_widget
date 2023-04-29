@@ -155,7 +155,7 @@ function style_generic_table(table) {
 
 function style_generic_td(td) {
     setStyles(td, {
-        border: "1px solid blue",
+        border: "1px solid black",
         padding: "4px",
     });
     return td;
