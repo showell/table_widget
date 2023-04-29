@@ -2,7 +2,7 @@ function dom_header_row(headers) {
     const tr = document.createElement("tr");
     for (const h of headers) {
         const th = document.createElement("th");
-        th.id = h.id; 
+        th.id = h.id;
         th.innerHTML = h.innerHTML;
         tr.append(th);
     }
@@ -15,7 +15,7 @@ function dom_tr(child_elems) {
     return tr;
 }
 
-function dom_td({id, elem}) {
+function dom_td({ id, elem }) {
     const td = document.createElement("td");
     td.id = id;
     td.append(elem);
@@ -33,7 +33,7 @@ function style_generic_table(table) {
             border: "1px solid blue",
             padding: "4px",
         });
-    } 
+    }
 }
 
 function style_generic_td(td) {
@@ -44,7 +44,7 @@ function style_generic_td(td) {
     return td;
 }
 
-function make_table({make_header_row, num_rows, make_tr}) {
+function make_table({ make_header_row, num_rows, make_tr }) {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     table.append(thead);
@@ -62,19 +62,19 @@ function make_table({make_header_row, num_rows, make_tr}) {
 
 function build_integer_table() {
     const integer_data = [
-        {n: 0, square: 0},
-        {n: 1, square: 1},
-        {n: 2, square: 4},
-        {n: 3, square: 9},
-        {n: 4, square: 16},
-        {n: 5, square: 25},
-        {n: 6, square: 36},
+        { n: 0, square: 0 },
+        { n: 1, square: 1 },
+        { n: 2, square: 4 },
+        { n: 3, square: 9 },
+        { n: 4, square: 16 },
+        { n: 5, square: 25 },
+        { n: 6, square: 36 },
     ];
 
     // assume innerHTML comes from calling some templates or whatever
     const integer_headers = [
-        {id: "n", innerHTML: "Number"},
-        {id: "square", innerHTML: "n<sup>2</sup>"},
+        { id: "n", innerHTML: "Number" },
+        { id: "square", innerHTML: "n<sup>2</sup>" },
     ];
 
     function style_integer_table(table) {
@@ -114,24 +114,20 @@ function build_integer_table() {
     }
 
     function make_td_n(data) {
-        const td = dom_td({id: `n-${data.n}`, elem: data.n});
+        const td = dom_td({ id: `n-${data.n}`, elem: data.n });
         return style_td_n(td);
     }
-    
+
     function make_td_square(data) {
-        const td = dom_td({id: `square-${data.n}`, elem: data.square});
+        const td = dom_td({ id: `square-${data.n}`, elem: data.square });
         return style_td_square(td);
     }
 
     function make_tr(i) {
         const data = integer_data[i];
         const td_makers = [make_td_n, make_td_square];
-        return dom_tr([
-            make_td_n(data),
-            make_td_square(data),
-        ]);
+        return dom_tr([make_td_n(data), make_td_square(data)]);
     }
-    
 
     const table = make_table({
         make_header_row,
@@ -162,4 +158,3 @@ function setStyles(elem, styles) {
 }
 
 build_integer_table();
-
