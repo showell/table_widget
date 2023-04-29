@@ -4,9 +4,13 @@ build_prime_table();
 build_even_number_table();
 
 function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
+    function num_rendered() {
+        return parent_elem.children.length;
+    }
+
     function overwrite(i, elem) {
         console.log("overwrite", i);
-        if (i >= parent_elem.children.length) {
+        if (i >= num_rendered()) {
             parent_elem.append(elem);
         } else {
             parent_elem.replaceChild(elem, parent_elem.children[i]);
@@ -26,10 +30,20 @@ function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
         // TODO: handle shrinking lists
     }
 
-    return { repopulate };
+    function grow() {
+        const num_rows = get_num_rows();
+        repopulate_range(num_rendered(), num_rows);
+    }
+
+    return { grow, repopulate };
 }
 
 function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
+    function grow() {
+        console.log("grow", table.id);
+        my_renderer.grow();
+    }
+
     function repopulate() {
         console.log("repopulate", table.id);
         my_renderer.repopulate();
@@ -54,7 +68,7 @@ function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
 
     repopulate();
 
-    return { table, repopulate };
+    return { table, repopulate, grow };
 }
 
 function dom_empty_table() {
@@ -166,7 +180,7 @@ function build_even_number_table() {
             return;
         }
         even_numbers.push(i * 2);
-        table_widget.repopulate();
+        table_widget.grow();
     }
 
     let i = 0;
@@ -330,6 +344,10 @@ function build_integer_table_widget({ number_store_callback }) {
         return style_tr(tr, i);
     }
 
+    function grow() {
+        table_widget.grow();
+    }
+
     function repopulate() {
         table_widget.repopulate();
     }
@@ -352,6 +370,7 @@ function build_integer_table_widget({ number_store_callback }) {
     return {
         table: table_widget.table,
         repopulate,
+        grow,
         th_n,
         th_square,
     };
