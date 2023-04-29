@@ -13,13 +13,9 @@ function list_renderer({ parent_elem, make_child, get_num_rows }) {
 }
 
 function simple_table_widget({ make_header_row, make_tr }) {
-    const table = document.createElement("table");
-    const thead = document.createElement("thead");
-    table.append(thead);
-    thead.append(make_header_row());
+    const {table, thead, tbody} = dom_empty_table();
 
-    const tbody = document.createElement("tbody");
-    table.append(tbody);
+    thead.append(make_header_row());
 
     let my_num_rows = 0;
 
@@ -40,6 +36,17 @@ function simple_table_widget({ make_header_row, make_tr }) {
     }
 
     return { table, repopulate };
+}
+
+function dom_empty_table() {
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    table.append(thead);
+
+    const tbody = document.createElement("tbody");
+    table.append(tbody);
+
+    return { table, thead, tbody }
 }
 
 function dom_tr(...child_elems) {
