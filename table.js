@@ -1,6 +1,7 @@
 build_prime_table();
+build_even_number_table();
 
-function simple_table_widget({ make_header_row, num_rows, make_tr }) {
+function simple_table_widget({ make_header_row, make_tr }) {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     table.append(thead);
@@ -9,7 +10,7 @@ function simple_table_widget({ make_header_row, num_rows, make_tr }) {
     const tbody = document.createElement("tbody");
     table.append(tbody);
 
-    function repopulate() {
+    function repopulate(num_rows) {
         console.log("repopulate", table.id);
         tbody.innerHTML = "";
         for (let i = 0; i < num_rows; ++i) {
@@ -48,6 +49,42 @@ function wire_up_reverse_button({th, callback}) {
     button.innerText = "reverse";
     button.addEventListener("click", callback);
     th.append("  ", button);
+}
+
+function build_even_number_table() {
+    function container() {
+        return document.querySelector("#even_numbers");
+    }
+
+    function bump() {
+        if (i > 10) {
+            return;
+        }
+        i += 1;
+        even_numbers.push(i * 2);
+        table_widget.repopulate();
+    }
+    
+    let i = 0;
+    const even_numbers = [];
+
+    const number_store_callback = {
+        get_integers: () => even_numbers,
+        size: () => even_numbers.length,
+    };
+
+    const table_widget = build_integer_table_widget({number_store_callback});
+    const table = table_widget.table;
+
+    table.id = "even_numbers";
+    setStyles(table_widget.th_square, {
+        color: "darkred",
+    });
+
+    bump();
+    container().append(table);
+
+    setInterval(bump, 1000);
 }
 
 function build_number_store(ints) {
@@ -187,12 +224,15 @@ function build_integer_table_widget({number_store_callback}) {
         return style_tr(tr, i);
     }
 
+    function repopulate() {
+        table_widget.repopulate(number_store_callback.size());
+    }
+
     const th_n = make_th_n();
     const th_square = make_th_square();
 
     const table_widget = simple_table_widget({
         make_header_row,
-        num_rows: num_rows(),
         make_tr,
     });
 
@@ -200,7 +240,7 @@ function build_integer_table_widget({number_store_callback}) {
 
     return {
         table: table_widget.table,
-        repopulate: table_widget.repopulate,
+        repopulate,
         th_n,
         th_square,
     }
