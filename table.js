@@ -78,7 +78,12 @@ function build_prime_table() {
     }
 
     const number_store = build_prime_store();
-    const table_widget = build_integer_table_widget({number_store});
+    const number_store_callback = {
+        get_integers: number_store.get_integers,
+        size: number_store.size,
+    };
+
+    const table_widget = build_integer_table_widget({number_store_callback});
     const table = table_widget.table;
 
     table.id = "prime_squares";
@@ -96,7 +101,7 @@ function build_prime_table() {
     });
 }
 
-function build_integer_table_widget({number_store}) {
+function build_integer_table_widget({number_store_callback}) {
     function styled_th() {
         const elem = document.createElement("th");
         return setStyles(elem, {
@@ -132,7 +137,7 @@ function build_integer_table_widget({number_store}) {
     }
 
     function num_rows() {
-        return number_store.size();
+        return number_store_callback.size();
     }
 
     function style_td_n(td) {
@@ -176,7 +181,7 @@ function build_integer_table_widget({number_store}) {
     }
 
     function make_tr(i) {
-        const current_ints = number_store.get_integers();
+        const current_ints = number_store_callback.get_integers();
         const n = current_ints[i];
         const tr = dom_tr(make_td_n(n), make_td_square(n));
         return style_tr(tr, i);
