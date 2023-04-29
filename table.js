@@ -1,3 +1,5 @@
+build_prime_table();
+
 function dom_tr(...child_elems) {
     const tr = document.createElement("tr");
     tr.append(...child_elems);
@@ -37,10 +39,33 @@ function maybe_stripe(elem, i, color) {
     return elem;
 }
 
-function build_integer_table() {
-    const primes = [2, 3, 5, 7, 11, 13, 17];
-    const current_ints = primes;
+function build_number_store(ints) {
+    function get_integers() {
+        return ints;
+    }
 
+    function size() {
+        return ints.length;
+    }
+
+    return {get_integers, size};
+}
+
+function prime_store() {
+    return build_number_store([2, 3, 5, 7, 11, 13, 17]);
+}
+
+function build_prime_table() {
+    function container() {
+        return document.querySelector("#prime_squares");
+    }
+
+    const table = build_integer_table({number_store: prime_store()});
+    table.id = "prime_squares";
+    container().append(table);
+}
+
+function build_integer_table({number_store}) {
     function styled_th() {
         const elem = document.createElement("th");
         return setStyles(elem, {
@@ -75,12 +100,8 @@ function build_integer_table() {
         return table;
     }
 
-    function container() {
-        return document.querySelector("#integers");
-    }
-
     function num_rows() {
-        return current_ints.length;
+        return number_store.size();
     }
 
     function style_td_n(td) {
@@ -124,6 +145,7 @@ function build_integer_table() {
     }
 
     function make_tr(i) {
+        const current_ints = number_store.get_integers();
         const n = current_ints[i];
         const tr = dom_tr(make_td_n(n), make_td_square(n));
         return style_tr(tr, i);
@@ -134,9 +156,9 @@ function build_integer_table() {
         num_rows: num_rows(),
         make_tr,
     });
-    table.id = "integer_table";
     style_integer_table(table);
-    container().append(table);
+
+    return table;
 }
 
 function style_generic_table(table) {
@@ -179,5 +201,3 @@ function setStyles(elem, styles) {
     // console.trace(info.join("\n"));
     return elem;
 }
-
-build_integer_table();
