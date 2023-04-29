@@ -1,4 +1,4 @@
-function dom_tr(child_elems) {
+function dom_tr(...child_elems) {
     const tr = document.createElement("tr");
     tr.append(...child_elems);
     return tr;
@@ -64,7 +64,7 @@ function build_integer_table() {
     }
 
     function make_header_row() {
-        return dom_tr([th_n(), th_square()]);
+        return dom_tr(th_n(), th_square());
     }
 
     function style_integer_table(table) {
@@ -125,7 +125,7 @@ function build_integer_table() {
 
     function make_tr(i) {
         const n = current_ints[i];
-        const tr = dom_tr([make_td_n(n), make_td_square(n)]);
+        const tr = dom_tr(make_td_n(n), make_td_square(n));
         return style_tr(tr, i);
     }
 
