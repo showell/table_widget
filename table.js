@@ -1,18 +1,5 @@
 build_prime_table();
 
-function dom_tr(...child_elems) {
-    const tr = document.createElement("tr");
-    tr.append(...child_elems);
-    return tr;
-}
-
-function dom_td({ id, elem }) {
-    const td = document.createElement("td");
-    td.id = id;
-    td.append(elem);
-    return td;
-}
-
 function simple_table_widget({ make_header_row, num_rows, make_tr }) {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
@@ -31,6 +18,19 @@ function simple_table_widget({ make_header_row, num_rows, make_tr }) {
     }
 
     return {table, repopulate};
+}
+
+function dom_tr(...child_elems) {
+    const tr = document.createElement("tr");
+    tr.append(...child_elems);
+    return tr;
+}
+
+function dom_td({ id, elem }) {
+    const td = document.createElement("td");
+    td.id = id;
+    td.append(elem);
+    return td;
 }
 
 function maybe_stripe(elem, i, color) {
@@ -77,6 +77,11 @@ function build_prime_table() {
         return document.querySelector("#prime_squares");
     }
 
+    function reverse() {
+        number_store.reverse();
+        table_widget.repopulate();
+    }
+
     const number_store = build_prime_store();
     const number_store_callback = {
         get_integers: number_store.get_integers,
@@ -89,11 +94,6 @@ function build_prime_table() {
     table.id = "prime_squares";
     table_widget.repopulate();
     container().append(table);
-
-    function reverse() {
-        number_store.reverse();
-        table_widget.repopulate();
-    }
 
     wire_up_reverse_button({
         th: table_widget.th_n,
