@@ -1,6 +1,17 @@
 build_prime_table();
 build_even_number_table();
 
+function list_renderer({ parent_elem, make_child, get_num_rows }) {
+    function repopulate() {
+        parent_elem.innerHTML = "";
+        for (let i = 0; i < get_num_rows(); ++i) {
+            parent_elem.append(make_child(i));
+        }
+    }
+
+    return { repopulate };
+}
+
 function simple_table_widget({ make_header_row, make_tr }) {
     const table = document.createElement("table");
     const thead = document.createElement("thead");
@@ -10,12 +21,22 @@ function simple_table_widget({ make_header_row, make_tr }) {
     const tbody = document.createElement("tbody");
     table.append(tbody);
 
+    let my_num_rows = 0;
+
+    function get_num_rows() {
+        return my_num_rows;
+    }
+
+    const my_renderer = list_renderer({
+        parent_elem: tbody,
+        make_child: make_tr,
+        get_num_rows,
+    });
+
     function repopulate(num_rows) {
+        my_num_rows = num_rows;
         console.log("repopulate", table.id);
-        tbody.innerHTML = "";
-        for (let i = 0; i < num_rows; ++i) {
-            tbody.append(make_tr(i));
-        }
+        my_renderer.repopulate();
     }
 
     return { table, repopulate };
@@ -51,16 +72,30 @@ function wire_up_reverse_button({ th, callback }) {
     th.append("  ", button);
 }
 
+function wrap_table(table) {
+    const div = document.createElement("div");
+
+    setStyles(div, {
+        display: "inline-block",
+        overflowY: "scroll",
+        maxHeight: "400px",
+    });
+
+    div.append(table);
+    return div;
+}
+
 function build_even_number_table() {
     function container() {
         return document.querySelector("#even_numbers");
     }
 
     function bump() {
-        if (i > 10) {
+        i += 1;
+        if (i > 20) {
+            clearInterval(bump_id);
             return;
         }
-        i += 1;
         even_numbers.push(i * 2);
         table_widget.repopulate();
     }
@@ -82,9 +117,9 @@ function build_even_number_table() {
     });
 
     bump();
-    container().append(table);
+    container().append(wrap_table(table));
 
-    setInterval(bump, 1000);
+    const bump_id = setInterval(bump, 500);
 }
 
 function build_number_store(ints) {
@@ -250,6 +285,8 @@ function style_generic_table(table) {
     setStyles(table, {
         border: "1px solid black",
         borderCollapse: "collapse",
+        margin: "auto",
+        display: "block",
     });
 
     for (const th of table.querySelectorAll("th")) {
