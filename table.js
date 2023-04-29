@@ -223,7 +223,7 @@ function build_integer_table_widget({ number_store_callback }) {
         td = style_generic_td(td);
         return setStyles(td, {
             color: "darkred",
-            width: "70px",
+            width: "130px",
             fontSize: "150%",
         });
     }
@@ -291,8 +291,10 @@ function style_generic_table(table) {
 
     for (const th of table.querySelectorAll("th")) {
         setStyles(th, {
-            border: "1px solid black",
             padding: "4px",
+            position: "sticky",
+            top: "0px",
+            border: "1px solid black",
         });
     }
 }
