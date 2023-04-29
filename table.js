@@ -1,3 +1,5 @@
+build_person_table();
+build_fruits_table();
 build_prime_table();
 build_even_number_table();
 
@@ -12,16 +14,10 @@ function list_renderer({ parent_elem, make_child, get_num_rows }) {
     return { repopulate };
 }
 
-function simple_table_widget({ make_header_row, make_tr }) {
+function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
     const {table, thead, tbody} = dom_empty_table();
 
     thead.append(make_header_row());
-
-    let my_num_rows = 0;
-
-    function get_num_rows() {
-        return my_num_rows;
-    }
 
     const my_renderer = list_renderer({
         parent_elem: tbody,
@@ -29,11 +25,12 @@ function simple_table_widget({ make_header_row, make_tr }) {
         get_num_rows,
     });
 
-    function repopulate(num_rows) {
-        my_num_rows = num_rows;
+    function repopulate() {
         console.log("repopulate", table.id);
         my_renderer.repopulate();
     }
+
+    repopulate();
 
     return { table, repopulate };
 }
@@ -90,6 +87,49 @@ function wrap_table(table) {
 
     div.append(table);
     return div;
+}
+
+function easy_table({header_title, items}) {
+    function make_header_row() {
+        const th = document.createElement("th");
+        th.innerText = header_title;
+        return dom_tr(th);
+    }
+
+    function make_tr(i) {
+        const id = `item-${i}`;
+        const elem = document.createElement("span");
+        elem.innerText = items[i];
+        return dom_tr(dom_td({id, elem}));
+    }
+
+    function get_num_rows() {
+        return items.length;
+    }
+
+    const widget = simple_table_widget({make_header_row, make_tr, get_num_rows});
+
+    style_generic_table(widget.table);
+
+    return widget.table;
+}
+
+function build_person_table() {
+    const header_title = "Employee";
+    const items = ["alice", "bob", "cindy"];
+    const table = easy_table({header_title, items});
+    table.id = "persons-table";
+
+    document.querySelector("#persons").append(table);
+}
+
+function build_fruits_table() {
+    const header_title = "Fruit";
+    const items = ["apple", "banana", "grape", "pineapple"];
+    const table = easy_table({header_title, items});
+    table.id = "persons-table";
+
+    document.querySelector("#fruits").append(table);
 }
 
 function build_even_number_table() {
@@ -172,7 +212,6 @@ function build_prime_table() {
     const table = table_widget.table;
 
     table.id = "prime_squares";
-    table_widget.repopulate();
     container().append(table);
 
     wire_up_reverse_button({
@@ -268,7 +307,11 @@ function build_integer_table_widget({ number_store_callback }) {
     }
 
     function repopulate() {
-        table_widget.repopulate(number_store_callback.size());
+        table_widget.repopulate();
+    }
+
+    function get_num_rows() {
+        return number_store_callback.size();
     }
 
     const th_n = make_th_n();
@@ -277,6 +320,7 @@ function build_integer_table_widget({ number_store_callback }) {
     const table_widget = simple_table_widget({
         make_header_row,
         make_tr,
+        get_num_rows,
     });
 
     style_integer_table(table_widget.table);
