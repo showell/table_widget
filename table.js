@@ -141,13 +141,13 @@ function build_integer_table() {
 
 function style_generic_table(table) {
     setStyles(table, {
-        border: "1px solid blue",
+        border: "1px solid black",
         borderCollapse: "collapse",
     });
 
     for (const th of table.querySelectorAll("th")) {
         setStyles(th, {
-            border: "1px solid blue",
+            border: "1px solid black",
             padding: "4px",
         });
     }
