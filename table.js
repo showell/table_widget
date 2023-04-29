@@ -83,7 +83,7 @@ function build_integer_table() {
             textAlign: "center",
         });
         setStyles(table.querySelector("thead"), {
-            background: "aliceblue",
+            background: "darkseagreen",
         });
     }
 
@@ -106,8 +106,8 @@ function build_integer_table() {
     function style_td_square(td) {
         td = style_generic_td(td);
         setStyles(td, {
-            background: "azure",
-            color: "darkred",
+            background: "antiquewhite",
+            color: "blue",
             width: "60px",
         });
         return td;
