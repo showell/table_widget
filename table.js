@@ -1,19 +1,9 @@
-const {
-    dom_tr,
-    dom_td,
-    maybe_stripe,
-} = window.dom_helpers;
+const { dom_tr, dom_td, maybe_stripe } = window.dom_helpers;
 
-const {
-    style_generic_table,
-    style_generic_td,
-    setStyles,
-} = window.style_helpers;
+const { style_generic_table, style_generic_td, setStyles } =
+    window.style_helpers;
 
-const {
-    simple_table_widget,
-    wire_up_reverse_button,
-} = window.table_helpers;
+const { simple_table_widget, wire_up_reverse_button } = window.table_helpers;
 
 build_person_table();
 build_fruits_table();
@@ -40,7 +30,7 @@ function easy_table({ header_title, items }) {
 
     const maxHeight = "150px";
 
-    const {table} = simple_table_widget({
+    const { table } = simple_table_widget({
         make_header_row,
         make_tr,
         get_num_rows,
@@ -133,10 +123,11 @@ function build_even_number_table() {
 
     const maxHeight = "300px";
 
-    const {table, resize_list, scroll_container, th_number, th_square} = build_integer_table_widget({
-        number_store_callback,
-        maxHeight,
-    });
+    const { table, resize_list, scroll_container, th_number, th_square } =
+        build_integer_table_widget({
+            number_store_callback,
+            maxHeight,
+        });
 
     table.id = "even_numbers";
     setStyles(th_number, {
@@ -191,7 +182,7 @@ function build_prime_table() {
 
     const maxHeight = "200px";
 
-    const {table, th_number, repopulate} = build_integer_table_widget({
+    const { table, th_number, repopulate } = build_integer_table_widget({
         number_store_callback,
         maxHeight,
     });
@@ -320,4 +311,3 @@ function build_integer_table_widget({ number_store_callback, maxHeight }) {
         th_square,
     };
 }
-

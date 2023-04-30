@@ -1,9 +1,5 @@
 window.table_helpers = (function () {
-    const {
-        dom_empty_table,
-        dom_tr,
-        dom_td,
-    } = window.dom_helpers;
+    const { dom_empty_table, dom_tr, dom_td } = window.dom_helpers;
 
     function list_renderer({ parent_elem, make_child, get_num_rows }) {
         function overwrite(i, elem) {
@@ -18,8 +14,11 @@ window.table_helpers = (function () {
         function is_child_too_far_down(i) {
             // TODO: integrate once I guarantee tables get wrapped in a scroll
             // container early enough.
-            const scroll_container = parent_elem.closest(".table_scroll_container");
-            const child_top = parent_elem.children[i].getBoundingClientRect().top;
+            const scroll_container = parent_elem.closest(
+                ".table_scroll_container"
+            );
+            const child_top =
+                parent_elem.children[i].getBoundingClientRect().top;
             const container_bottom =
                 scroll_container.getBoundingClientRect().bottom;
             console.log(Math.floor(child_top), Math.floor(container_bottom));

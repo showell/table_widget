@@ -1,5 +1,4 @@
 window.dom_helpers = (function () {
-
     function dom_empty_table() {
         const table = document.createElement("table");
         const thead = document.createElement("thead");
@@ -39,5 +38,5 @@ window.dom_helpers = (function () {
         dom_tr,
         dom_td,
         maybe_stripe,
-    }
+    };
 })();

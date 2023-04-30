@@ -1,5 +1,4 @@
 window.style_helpers = (function () {
-
     function style_generic_table(table) {
         setStyles(table, {
             border: "1px solid black",
