@@ -56,7 +56,12 @@ function list_renderer({ parent_elem, make_child, get_num_rows }) {
     return { resize_list, repopulate };
 }
 
-function simple_table_widget({ make_header_row, make_tr, get_num_rows, maxHeight }) {
+function simple_table_widget({
+    make_header_row,
+    make_tr,
+    get_num_rows,
+    maxHeight,
+}) {
     function resize_list() {
         console.log("resize_list", table.id);
         my_renderer.resize_list();
@@ -259,7 +264,7 @@ function build_even_number_table() {
     const table_widget = build_integer_table_widget({
         number_store_callback,
         maxHeight,
-     });
+    });
     const table = table_widget.table;
 
     table.id = "even_numbers";
@@ -426,12 +431,13 @@ function build_integer_table_widget({ number_store_callback, maxHeight }) {
     const th_n = make_th_n();
     const th_square = make_th_square();
 
-    const {scroll_container, table, resize_list, repopulate} = simple_table_widget({
-        make_header_row,
-        make_tr,
-        get_num_rows,
-        maxHeight,
-    });
+    const { scroll_container, table, resize_list, repopulate } =
+        simple_table_widget({
+            make_header_row,
+            make_tr,
+            get_num_rows,
+            maxHeight,
+        });
 
     style_integer_table(table);
 
