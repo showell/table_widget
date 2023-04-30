@@ -1,5 +1,5 @@
 window.table_helpers = (function () {
-    const { dom_empty_table, dom_tr, dom_td } = window.dom_helpers;
+    const { dom_empty_table } = window.dom_helpers;
 
     function list_renderer({ parent_elem, make_child, get_num_rows }) {
         function overwrite(i, elem) {
