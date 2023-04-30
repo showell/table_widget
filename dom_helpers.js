@@ -1,4 +1,6 @@
 window.dom_helpers = (function () {
+    const { setStyles } = window.style_helpers;
+
     function dom_empty_table() {
         const table = document.createElement("table");
         const thead = document.createElement("thead");

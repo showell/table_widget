@@ -1,6 +1,9 @@
 window.table_helpers = (function () {
     const { dom_empty_table } = window.dom_helpers;
 
+    const { setStyles } = window.style_helpers;
+    console.log("YO", setStyles);
+
     function list_renderer({ parent_elem, make_child, get_num_rows }) {
         function overwrite(i, elem) {
             console.log("overwrite", i);
