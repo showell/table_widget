@@ -56,7 +56,7 @@ function list_renderer({ parent_elem, make_child, get_num_rows }) {
     return { resize_list, repopulate };
 }
 
-function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
+function simple_table_widget({ make_header_row, make_tr, get_num_rows, maxHeight }) {
     function resize_list() {
         console.log("resize_list", table.id);
         my_renderer.resize_list();
@@ -71,6 +71,11 @@ function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
 
     thead.append(make_header_row());
 
+    // It is important to wrap the table with a scrolling container
+    // BEFORE you start rendering the list of rows.
+
+    const scroll_container = wrap_table(table, maxHeight);
+
     const my_renderer = list_renderer({
         parent_elem: tbody,
         make_child: make_tr,
@@ -79,7 +84,7 @@ function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
 
     repopulate();
 
-    return { table, repopulate, resize_list };
+    return { scroll_container, table, repopulate, resize_list };
 }
 
 function dom_empty_table() {
@@ -156,10 +161,13 @@ function easy_table({ header_title, items }) {
         return items.length;
     }
 
+    const maxHeight = "150px";
+
     const widget = simple_table_widget({
         make_header_row,
         make_tr,
         get_num_rows,
+        maxHeight,
     });
 
     style_generic_table(widget.table);
@@ -193,10 +201,14 @@ function grow_data_even_numbers({ even_numbers, resize_list }) {
 
     function shrink() {
         even_numbers.pop();
+        even_numbers.pop();
+        even_numbers.pop();
+        even_numbers.pop();
         resize_list();
     }
 
     function grow() {
+        even_numbers.push(even_numbers.length * 2);
         even_numbers.push(even_numbers.length * 2);
         even_numbers.push(even_numbers.length * 2);
         even_numbers.push(even_numbers.length * 2);
@@ -214,13 +226,13 @@ function grow_data_even_numbers({ even_numbers, resize_list }) {
     }
 
     function make_shrink_button() {
-        const button = make_button("shrink");
+        const button = make_button("shrink (remove 4 rows)");
         container.prepend(button);
         button.addEventListener("click", shrink);
     }
 
     function make_grow_button() {
-        const button = make_button("grow");
+        const button = make_button("grow (add 4 rows)");
         container.prepend(button);
         button.addEventListener("click", grow);
     }
@@ -242,7 +254,12 @@ function build_even_number_table() {
         size: () => even_numbers.length,
     };
 
-    const table_widget = build_integer_table_widget({ number_store_callback });
+    const maxHeight = "300px";
+
+    const table_widget = build_integer_table_widget({
+        number_store_callback,
+        maxHeight,
+     });
     const table = table_widget.table;
 
     table.id = "even_numbers";
@@ -255,7 +272,7 @@ function build_even_number_table() {
         background: "lightgreen",
     });
 
-    container().append(wrap_table(table, "300px"));
+    container().append(table_widget.scroll_container);
 
     grow_data_even_numbers({
         even_numbers,
@@ -301,7 +318,12 @@ function build_prime_table() {
         size: number_store.size,
     };
 
-    const table_widget = build_integer_table_widget({ number_store_callback });
+    const maxHeight = "200px";
+
+    const table_widget = build_integer_table_widget({
+        number_store_callback,
+        maxHeight,
+    });
     const table = table_widget.table;
 
     table.id = "prime_squares";
@@ -313,7 +335,7 @@ function build_prime_table() {
     });
 }
 
-function build_integer_table_widget({ number_store_callback }) {
+function build_integer_table_widget({ number_store_callback, maxHeight }) {
     function styled_th() {
         const elem = document.createElement("th");
         return setStyles(elem, {
@@ -397,14 +419,6 @@ function build_integer_table_widget({ number_store_callback }) {
         return style_tr(tr, i);
     }
 
-    function resize_list() {
-        table_widget.resize_list();
-    }
-
-    function repopulate() {
-        table_widget.repopulate();
-    }
-
     function get_num_rows() {
         return number_store_callback.size();
     }
@@ -412,16 +426,18 @@ function build_integer_table_widget({ number_store_callback }) {
     const th_n = make_th_n();
     const th_square = make_th_square();
 
-    const table_widget = simple_table_widget({
+    const {scroll_container, table, resize_list, repopulate} = simple_table_widget({
         make_header_row,
         make_tr,
         get_num_rows,
+        maxHeight,
     });
 
-    style_integer_table(table_widget.table);
+    style_integer_table(table);
 
     return {
-        table: table_widget.table,
+        scroll_container,
+        table,
         repopulate,
         resize_list,
         th_n,
