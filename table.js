@@ -311,11 +311,6 @@ function build_prime_table() {
         return document.querySelector("#prime_squares");
     }
 
-    function reverse() {
-        number_store.reverse();
-        table_widget.repopulate();
-    }
-
     const number_store = build_prime_store();
     const number_store_callback = {
         get_integers: number_store.get_integers,
@@ -324,7 +319,7 @@ function build_prime_table() {
 
     const maxHeight = "200px";
 
-    const {table, th_number} = build_integer_table_widget({
+    const {table, th_number, repopulate} = build_integer_table_widget({
         number_store_callback,
         maxHeight,
     });
@@ -336,6 +331,11 @@ function build_prime_table() {
         th: th_number,
         callback: reverse,
     });
+
+    function reverse() {
+        number_store.reverse();
+        repopulate();
+    }
 }
 
 function build_integer_table_widget({ number_store_callback, maxHeight }) {

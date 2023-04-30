@@ -84,7 +84,7 @@ function list_renderer({ parent_elem, make_child, get_num_rows }) {
             }
 
             function build_prime_table() {
-                const {table, th_number} = build_integer_table_widget({
+                const {table, th_number, repopulate} = build_integer_table_widget({
                     number_store_callback,
                     maxHeight,
                 });
