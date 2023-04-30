@@ -261,13 +261,13 @@ function build_even_number_table() {
 
     const maxHeight = "300px";
 
-    const {table, resize_list, scroll_container, th_n, th_square} = build_integer_table_widget({
+    const {table, resize_list, scroll_container, th_number, th_square} = build_integer_table_widget({
         number_store_callback,
         maxHeight,
     });
 
     table.id = "even_numbers";
-    setStyles(th_n, {
+    setStyles(th_number, {
         color: "darkgreen",
     });
 
@@ -324,7 +324,7 @@ function build_prime_table() {
 
     const maxHeight = "200px";
 
-    const {table, th_n} = build_integer_table_widget({
+    const {table, th_number} = build_integer_table_widget({
         number_store_callback,
         maxHeight,
     });
@@ -333,7 +333,7 @@ function build_prime_table() {
     container().append(table);
 
     wire_up_reverse_button({
-        th: th_n,
+        th: th_number,
         callback: reverse,
     });
 }
@@ -347,9 +347,9 @@ function build_integer_table_widget({ number_store_callback, maxHeight }) {
         });
     }
 
-    function make_th_n() {
+    function make_th_number() {
         const th = styled_th();
-        th.id = "integer-th-n";
+        th.id = "integer-th-number";
         th.append("Number");
         return th;
     }
@@ -362,7 +362,7 @@ function build_integer_table_widget({ number_store_callback, maxHeight }) {
     }
 
     function make_header_row() {
-        return dom_tr(th_n, th_square);
+        return dom_tr(th_number, th_square);
     }
 
     function style_integer_table(table) {
@@ -426,7 +426,7 @@ function build_integer_table_widget({ number_store_callback, maxHeight }) {
         return number_store_callback.size();
     }
 
-    const th_n = make_th_n();
+    const th_number = make_th_number();
     const th_square = make_th_square();
 
     const { scroll_container, table, resize_list, repopulate } =
@@ -444,7 +444,7 @@ function build_integer_table_widget({ number_store_callback, maxHeight }) {
         table,
         repopulate,
         resize_list,
-        th_n,
+        th_number,
         th_square,
     };
 }
