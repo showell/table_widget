@@ -1,9 +1,7 @@
 {
-    const { dom_tr, dom_td } = window.dom_helpers;
+    const { setStyles } = window.style_helpers;
 
-    const { style_generic_table, setStyles } = window.style_helpers;
-
-    const { simple_table_widget, wire_up_reverse_button } = window.table_helpers;
+    const { wire_up_reverse_button } = window.table_helpers;
 
     const { build_integer_table_widget } = window.integer_table_helper;
 
