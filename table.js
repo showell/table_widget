@@ -168,16 +168,16 @@ function easy_table({ header_title, items }) {
 
     const maxHeight = "150px";
 
-    const widget = simple_table_widget({
+    const {table} = simple_table_widget({
         make_header_row,
         make_tr,
         get_num_rows,
         maxHeight,
     });
 
-    style_generic_table(widget.table);
+    style_generic_table(table);
 
-    return widget.table;
+    return table;
 }
 
 function build_person_table() {
