@@ -12,42 +12,10 @@
     build_prime_table();
     build_even_number_table();
 
-    function easy_table({ header_title, items }) {
-        function make_header_row() {
-            const th = document.createElement("th");
-            th.innerText = header_title;
-            return dom_tr(th);
-        }
-
-        function make_tr(i) {
-            const id = `item-${i}`;
-            const elem = document.createElement("span");
-            elem.innerText = items[i];
-            return dom_tr(dom_td({ id, elem }));
-        }
-
-        function get_num_rows() {
-            return items.length;
-        }
-
-        const maxHeight = "150px";
-
-        const { table } = simple_table_widget({
-            make_header_row,
-            make_tr,
-            get_num_rows,
-            maxHeight,
-        });
-
-        style_generic_table(table);
-
-        return table;
-    }
-
     function build_person_table() {
         const header_title = "Employee";
         const items = ["alice", "bob", "cindy"];
-        const table = easy_table({ header_title, items });
+        const table = build_single_column_table({ header_title, items });
         table.id = "persons-table";
 
         document.querySelector("#persons").append(table);
@@ -56,7 +24,7 @@
     function build_fruits_table() {
         const header_title = "Fruit";
         const items = ["apple", "banana", "grape", "pineapple"];
-        const table = easy_table({ header_title, items });
+        const table = build_single_column_table({ header_title, items });
         table.id = "persons-table";
 
         document.querySelector("#fruits").append(table);
