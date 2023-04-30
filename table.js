@@ -13,6 +13,18 @@ function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
         }
     }
 
+    function is_child_too_far_down(i) {
+        // TODO: integrate once I guarantee tables get wrapped in a scroll
+        // container early enough.
+        const scroll_container = parent_elem.closest(".table_scroll_container");
+        const child_top = parent_elem.children[i].getBoundingClientRect().top;
+        const container_bottom =
+            scroll_container.getBoundingClientRect().bottom;
+        console.log(Math.floor(child_top), Math.floor(container_bottom));
+
+        return child_top > container_bottom;
+    }
+
     function repopulate_range(lo, hi) {
         for (let i = lo; i < hi; ++i) {
             overwrite(i, make_child(i));
@@ -23,7 +35,7 @@ function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
         for (let i = parent_elem.children.length - 1; i >= num_rows; --i) {
             parent_elem.children[i].remove();
         }
-    } 
+    }
 
     function repopulate() {
         const num_rows = get_num_rows();
@@ -59,9 +71,9 @@ function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
         const td = document.createElement("td");
         td.innerText = "...";
         return dom_tr(td);
-    } 
+    }
 
-    const {table, thead, tbody} = dom_empty_table();
+    const { table, thead, tbody } = dom_empty_table();
 
     thead.append(make_header_row());
 
@@ -85,7 +97,7 @@ function dom_empty_table() {
     const tbody = document.createElement("tbody");
     table.append(tbody);
 
-    return { table, thead, tbody }
+    return { table, thead, tbody };
 }
 
 function dom_tr(...child_elems) {
@@ -118,20 +130,22 @@ function wire_up_reverse_button({ th, callback }) {
     th.append("  ", button);
 }
 
-function wrap_table(table) {
+function wrap_table(table, maxHeight) {
     const div = document.createElement("div");
+
+    div.className = "table_scroll_container";
 
     setStyles(div, {
         display: "inline-block",
         overflowY: "scroll",
-        maxHeight: "400px",
+        maxHeight,
     });
 
     div.append(table);
     return div;
 }
 
-function easy_table({header_title, items}) {
+function easy_table({ header_title, items }) {
     function make_header_row() {
         const th = document.createElement("th");
         th.innerText = header_title;
@@ -142,14 +156,18 @@ function easy_table({header_title, items}) {
         const id = `item-${i}`;
         const elem = document.createElement("span");
         elem.innerText = items[i];
-        return dom_tr(dom_td({id, elem}));
+        return dom_tr(dom_td({ id, elem }));
     }
 
     function get_num_rows() {
         return items.length;
     }
 
-    const widget = simple_table_widget({make_header_row, make_tr, get_num_rows});
+    const widget = simple_table_widget({
+        make_header_row,
+        make_tr,
+        get_num_rows,
+    });
 
     style_generic_table(widget.table);
 
@@ -159,7 +177,7 @@ function easy_table({header_title, items}) {
 function build_person_table() {
     const header_title = "Employee";
     const items = ["alice", "bob", "cindy"];
-    const table = easy_table({header_title, items});
+    const table = easy_table({ header_title, items });
     table.id = "persons-table";
 
     document.querySelector("#persons").append(table);
@@ -168,13 +186,13 @@ function build_person_table() {
 function build_fruits_table() {
     const header_title = "Fruit";
     const items = ["apple", "banana", "grape", "pineapple"];
-    const table = easy_table({header_title, items});
+    const table = easy_table({ header_title, items });
     table.id = "persons-table";
 
     document.querySelector("#fruits").append(table);
 }
 
-function grow_data_even_numbers({even_numbers, resize_list}) {
+function grow_data_even_numbers({ even_numbers, resize_list }) {
     /*
         This is to exercise our data-resizing code.
     */
@@ -184,9 +202,11 @@ function grow_data_even_numbers({even_numbers, resize_list}) {
         even_numbers.pop();
         resize_list();
     }
-        
+
     function grow() {
-        even_numbers.push(even_numbers.length * 2); 
+        even_numbers.push(even_numbers.length * 2);
+        even_numbers.push(even_numbers.length * 2);
+        even_numbers.push(even_numbers.length * 2);
         resize_list();
     }
 
@@ -199,7 +219,7 @@ function grow_data_even_numbers({even_numbers, resize_list}) {
         });
         return button;
     }
-        
+
     function make_shrink_button() {
         const button = make_button("shrink");
         container.prepend(button);
@@ -242,7 +262,7 @@ function build_even_number_table() {
         background: "lightgreen",
     });
 
-    container().append(wrap_table(table));
+    container().append(wrap_table(table, "300px"));
 
     grow_data_even_numbers({
         even_numbers,
