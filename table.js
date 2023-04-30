@@ -7,6 +7,8 @@
 
     const { build_single_column_table } = window.single_column_table_helper;
 
+    const { number_store } = window.data_helpers;
+
     build_person_table();
     build_fruits_table();
     build_prime_table();
@@ -117,24 +119,6 @@
         });
     }
 
-    function build_number_store(ints) {
-        let my_ints = ints.slice();
-
-        function get_integers() {
-            return my_ints;
-        }
-
-        function size() {
-            return my_ints.length;
-        }
-
-        function reverse_the_numbers() {
-            my_ints.reverse();
-        }
-
-        return { get_integers, size, reverse_the_numbers };
-    }
-
     function add_reverse_button_to_primes_table({
         reverse_the_numbers,
         repopulate,
@@ -156,11 +140,11 @@
             return document.querySelector("#prime_squares");
         }
 
-        function build_prime_store() {
-            return build_number_store([2, 3, 5, 7, 11, 13, 17]);
+        function prime_number_store() {
+            return number_store([2, 3, 5, 7, 11, 13, 17]);
         }
 
-        const { get_integers, size, reverse_the_numbers } = build_prime_store();
+        const { get_integers, size, reverse_the_numbers } = prime_number_store();
         const number_store_callback = { get_integers, size };
 
         const maxHeight = "200px";
