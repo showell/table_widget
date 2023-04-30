@@ -324,17 +324,16 @@ function build_prime_table() {
 
     const maxHeight = "200px";
 
-    const table_widget = build_integer_table_widget({
+    const {table, th_n} = build_integer_table_widget({
         number_store_callback,
         maxHeight,
     });
-    const table = table_widget.table;
 
     table.id = "prime_squares";
     container().append(table);
 
     wire_up_reverse_button({
-        th: table_widget.th_n,
+        th: th_n,
         callback: reverse,
     });
 }
