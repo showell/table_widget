@@ -135,7 +135,11 @@
         return { get_integers, size, reverse_the_numbers };
     }
 
-    function add_reverse_button_to_primes_table({reverse_the_numbers, repopulate, th_number}) {
+    function add_reverse_button_to_primes_table({
+        reverse_the_numbers,
+        repopulate,
+        th_number,
+    }) {
         function redraw_the_table_with_reversed_numbers() {
             reverse_the_numbers();
             repopulate();
@@ -156,8 +160,8 @@
             return build_number_store([2, 3, 5, 7, 11, 13, 17]);
         }
 
-        const {get_integers, size, reverse_the_numbers} = build_prime_store();
-        const number_store_callback = {get_integers, size};
+        const { get_integers, size, reverse_the_numbers } = build_prime_store();
+        const number_store_callback = { get_integers, size };
 
         const maxHeight = "200px";
 
