@@ -128,15 +128,23 @@
             return my_ints.length;
         }
 
-        function reverse() {
+        function reverse_the_numbers() {
             my_ints.reverse();
         }
 
-        return { get_integers, size, reverse };
+        return { get_integers, size, reverse_the_numbers };
     }
 
-    function build_prime_store() {
-        return build_number_store([2, 3, 5, 7, 11, 13, 17]);
+    function add_reverse_button_to_primes_table({reverse_the_numbers, repopulate, th_number}) {
+        function redraw_the_table_with_reversed_numbers() {
+            reverse_the_numbers();
+            repopulate();
+        }
+
+        wire_up_reverse_button({
+            th: th_number,
+            callback: redraw_the_table_with_reversed_numbers,
+        });
     }
 
     function build_prime_table() {
@@ -144,11 +152,12 @@
             return document.querySelector("#prime_squares");
         }
 
-        const number_store = build_prime_store();
-        const number_store_callback = {
-            get_integers: number_store.get_integers,
-            size: number_store.size,
-        };
+        function build_prime_store() {
+            return build_number_store([2, 3, 5, 7, 11, 13, 17]);
+        }
+
+        const {get_integers, size, reverse_the_numbers} = build_prime_store();
+        const number_store_callback = {get_integers, size};
 
         const maxHeight = "200px";
 
@@ -160,14 +169,10 @@
         table.id = "prime_squares";
         container().append(table);
 
-        wire_up_reverse_button({
-            th: th_number,
-            callback: reverse,
+        add_reverse_button_to_primes_table({
+            reverse_the_numbers,
+            repopulate,
+            th_number,
         });
-
-        function reverse() {
-            number_store.reverse();
-            repopulate();
-        }
     }
 }
