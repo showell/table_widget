@@ -61,7 +61,7 @@ function build_fruits_table() {
     document.querySelector("#fruits").append(table);
 }
 
-function grow_data_even_numbers({ even_numbers, resize_list }) {
+function make_grow_and_shrink_buttons({ even_numbers, resize_list }) {
     /*
         This is to exercise our data-resizing code.
     */
@@ -142,7 +142,7 @@ function build_even_number_table() {
 
     container().append(scroll_container);
 
-    grow_data_even_numbers({
+    make_grow_and_shrink_buttons({
         even_numbers,
         resize_list,
     });
