@@ -7,6 +7,8 @@
 
     const { build_integer_table_widget } = window.integer_table_helper;
 
+    const { build_single_column_table } = window.single_column_table_helper;
+
     build_person_table();
     build_fruits_table();
     build_prime_table();
