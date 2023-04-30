@@ -261,27 +261,26 @@ function build_even_number_table() {
 
     const maxHeight = "300px";
 
-    const table_widget = build_integer_table_widget({
+    const {table, resize_list, scroll_container, th_n, th_square} = build_integer_table_widget({
         number_store_callback,
         maxHeight,
     });
-    const table = table_widget.table;
 
     table.id = "even_numbers";
-    setStyles(table_widget.th_n, {
+    setStyles(th_n, {
         color: "darkgreen",
     });
 
-    setStyles(table_widget.th_square, {
+    setStyles(th_square, {
         color: "darkred",
         background: "lightgreen",
     });
 
-    container().append(table_widget.scroll_container);
+    container().append(scroll_container);
 
     grow_data_even_numbers({
         even_numbers,
-        resize_list: table_widget.resize_list,
+        resize_list,
     });
 }
 
