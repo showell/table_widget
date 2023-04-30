@@ -1,4 +1,4 @@
-const { dom_tr, dom_td, maybe_stripe } = window.dom_helpers;
+const { dom_tr, dom_td } = window.dom_helpers;
 
 const { style_generic_table, setStyles } = window.style_helpers;
 
