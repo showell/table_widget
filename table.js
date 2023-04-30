@@ -3,7 +3,7 @@ build_fruits_table();
 build_prime_table();
 build_even_number_table();
 
-function list_renderer({ parent_elem, make_child, get_num_rows, empty_row }) {
+function list_renderer({ parent_elem, make_child, get_num_rows }) {
     function overwrite(i, elem) {
         console.log("overwrite", i);
         if (i >= parent_elem.children.length) {
@@ -67,12 +67,6 @@ function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
         my_renderer.repopulate();
     }
 
-    function empty_row() {
-        const td = document.createElement("td");
-        td.innerText = "...";
-        return dom_tr(td);
-    }
-
     const { table, thead, tbody } = dom_empty_table();
 
     thead.append(make_header_row());
@@ -81,7 +75,6 @@ function simple_table_widget({ make_header_row, make_tr, get_num_rows }) {
         parent_elem: tbody,
         make_child: make_tr,
         get_num_rows,
-        empty_row,
     });
 
     repopulate();
